@@ -1,0 +1,25 @@
+const mongoose = require('mongoose');
+
+const Schema = mongoose.Schema;
+
+const OTPSchema = new Schema({
+    email: {
+        type: String,
+        trim: true,
+        required: 'Email needed',
+        lowercase: true
+    },
+    otp: {
+        type: String,
+        required: true
+    },
+    verified: {
+        type: Boolean,
+        required: true
+    },
+    body: String
+}, { timestamps: true });
+
+const OTP = mongoose.model('OTP', OTPSchema);
+
+module.exports = OTP;
