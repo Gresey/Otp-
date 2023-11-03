@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup</title>
+</head>
+<body>
+    <h1>Signup for Access</h1>
+    <form id="signupForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        <!-- Add other fields for user information -->
+
+        <button type="button" id="sendRequest">Send Request</button>
+    </form>
+
+    <div id="message"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const signupForm = document.getElementById("signupForm");
+            const emailInput = document.getElementById("email");
+            const sendRequestButton = document.getElementById("sendRequest");
+            const messageContainer = document.getElementById("message");
+
+            sendRequestButton.addEventListener("click", function () {
+                const email = emailInput.value;
+                // Collect other user information if needed
+
+                // Send a request to the server to handle the signup process
+                fetch("/send-request", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email }), // Send the email to the server
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        messageContainer.innerHTML = data.message;
+                    })
+                    .catch((error) => {
+                        messageContainer.innerHTML = "Error: " + error.message;
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

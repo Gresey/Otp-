@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mailer</title>
+</head>
+<body>
+    <form>
+        <div id="msg"></div>
+        <label>Recipient</label> <br>
+        <input type="email" name="email" required> <br> <br>
+        <button type="submit">Send</button>
+    </form>
+</body>
+<script>
+    const makePost = async(req) => {
+        let origin = new URL(window.location.href).origin;
+        const res =  await fetch(`${origin}/send`, {
+            method:"POST",
+            mode:"cors",
+            headers:{
+                'Content-type' : "application/json"
+            },
+            body: JSON.stringify(req)
+        })
+        
+        const x = await res.json();
+        if(x.status === 302){
+            document.getElementById('msg').innerHTML = `${x.message} Please click <a href='${origin}/verify'>here</a> to verify`;
+        } else if(x.status === 301){
+            document.getElementById('msg').innerHTML = `User exists`;
+        }
+    }
+
+    document.forms[0].addEventListener('submit', e => {
+        e.preventDefault();
+        let f = e.target;
+        let req = {};
+        for(let i =0; i<f.length-1; i++){
+            req[f[i].name] = f[i].value.trim();
+        }
+        makePost(req);
+    });
+
+</script>
+</html>
